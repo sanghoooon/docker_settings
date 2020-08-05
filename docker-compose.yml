@@ -1,0 +1,38 @@
+version: "3.5"
+services:
+  tb_sanghoon:
+    image: sanghslee/pytorch:1.5.0
+    container_name: tb_sanghoon
+    working_dir: /home/sanghoon/
+    volumes:
+      - /home/sanghoon:/home/sanghoon
+    ports:
+      - "6007:6006"
+    expose:
+      - "6007"
+    command: tensorboard --logdir /home/sanghoon --host='0.0.0.0' --port='6006' --path_prefix=/sh/tb/
+
+  workspace_sanghoon:
+    image: sanghslee/pytorch:1.5.0
+    container_name: workspace_sanghoon
+    working_dir: /home/sanghoon/
+    volumes:
+      - /home/sanghoon:/home/sanghoon
+      - /dataset:/dataset
+    tty: true
+    stdin_open: true
+    ipc: "host"
+    command: zsh
+
+  jupyter_sanghoon:
+    image: sanghslee/pytorch:1.5.0
+    container_name: jupyter_sanghoon
+    working_dir: /home/sanghoon/
+    volumes:
+      - /home/sanghoon:/home/sanghoon
+    ports:
+      - "8888:8888"
+    expose:
+      - "8888"
+    ipc: "host"
+    command: jupyter notebook --allow-root --ip="0.0.0.0" --port="8888" --no-browser --NotebookApp.base_url=/sh/nb --NotebookApp.password=
