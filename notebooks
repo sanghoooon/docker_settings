@@ -15,12 +15,42 @@ server {
 	proxy_pass            http://localhost:6009;
 	proxy_set_header      Host $host;
     }
-    location /sh/nb/ {
+
+
+    location /sh/ps/ {
         proxy_pass            http://localhost:8888;
         proxy_set_header      Host $host;
     }
-    location /jh/nb/api/kernels/ {
+    location /sh/ps/api/kernels/ {
         proxy_pass            http://localhost:8888;
+        proxy_set_header      Host $host;
+        # websocket support
+        proxy_http_version    1.1;
+        proxy_set_header      Upgrade "websocket";
+        proxy_set_header      Connection "Upgrade";
+        proxy_read_timeout    86400;
+    }
+
+    location /sh/ep/ {
+        proxy_pass            http://localhost:8889;
+        proxy_set_header      Host $host;
+    }
+    location /sh/ep/api/kernels/ {
+        proxy_pass            http://localhost:8889;
+        proxy_set_header      Host $host;
+        # websocket support
+        proxy_http_version    1.1;
+        proxy_set_header      Upgrade "websocket";
+        proxy_set_header      Connection "Upgrade";
+        proxy_read_timeout    86400;
+    }
+
+    location /sw/nb/ {
+        proxy_pass            http://localhost:8890;
+        proxy_set_header      Host $host;
+    }
+    location /sw/nb/api/kernels/ {
+        proxy_pass            http://localhost:8890;
         proxy_set_header      Host $host;
         # websocket support
         proxy_http_version    1.1;

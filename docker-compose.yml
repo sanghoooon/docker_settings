@@ -1,38 +1,79 @@
 version: "3.5"
 services:
-  tb_sanghoon:
-    image: sanghslee/pytorch:1.5.0
-    container_name: tb_sanghoon
-    working_dir: /home/sanghoon/
-    volumes:
-      - /home/sanghoon:/home/sanghoon
-    ports:
-      - "6007:6006"
-    expose:
-      - "6007"
-    command: tensorboard --logdir /home/sanghoon --host='0.0.0.0' --port='6006' --path_prefix=/sh/tb/
+  # tb_sanghoon:
+  #   image: sanghslee/pytorch:1.5.0
+  #   container_name: tb_sanghoon
+  #   working_dir: /home/sanghoon/
+  #   volumes:
+  #     - /home/sanghoon:/home/sanghoon
+  #   ports:
+  #     - "6007:6006"
+  #   expose:
+  #     - "6007"
+  #   command: tensorboard --logdir /home/sanghoon --host='0.0.0.0' --port='6006' --path_prefix=/sh/tb/
 
-  workspace_sanghoon:
-    image: sanghslee/pytorch:1.5.0
-    container_name: workspace_sanghoon
-    working_dir: /home/sanghoon/
+  workspace_ps:
+    image: dhbaek/pytorch:1.5.1-cuda10.1-cudnn7-runtime
+    container_name: workspace_ps
+    working_dir: /workspace/
     volumes:
-      - /home/sanghoon:/home/sanghoon
-      - /dataset:/dataset
+      - /home/sanghoon/workspace/personsearch:/workspace/work
+      - /home/sanghoon/dataset:/workspace/dataset
     tty: true
     stdin_open: true
     ipc: "host"
     command: zsh
 
-  jupyter_sanghoon:
+  jupyter_ps:
     image: sanghslee/pytorch:1.5.0
-    container_name: jupyter_sanghoon
-    working_dir: /home/sanghoon/
+    container_name: jupyter_ps
+    working_dir: /workspace/
     volumes:
-      - /home/sanghoon:/home/sanghoon
+     - /home/sanghoon/workspace/personsearch:/workspace/work
+     - /home/sanghoon/dataset:/workspace/dataset
     ports:
-      - "8888:8888"
+     - "8888:8888"
     expose:
-      - "8888"
+     - "8888"
     ipc: "host"
-    command: jupyter notebook --allow-root --ip="0.0.0.0" --port="8888" --no-browser --NotebookApp.base_url=/sh/nb --NotebookApp.password=
+    command: jupyter notebook --allow-root --ip="0.0.0.0" --port="8888" --no-browser --NotebookApp.base_url=/sh/ps --NotebookApp.password='sha1:0592f1a5b2d9:68585988e724b11b330a0c4fe4e361030e2bacb1'
+
+  workspace_ep:
+    image: dhbaek/pytorch:1.5.1-cuda10.1-cudnn7-runtime
+    container_name: workspace_ep
+    working_dir: /workspace/
+    volumes:
+      - /home/sanghoon/workspace/efficient_reid:/workspace/work
+      - /home/sanghoon/dataset:/workspace/dataset
+    tty: true
+    stdin_open: true
+    ipc: "host"
+    command: zsh
+
+  jupyter_ep:
+    image: sanghslee/pytorch:1.5.0
+    container_name: jupyter_ep
+    working_dir: /workspace/
+    volumes:
+     - /home/sanghoon/workspace/personsearch:/workspace/work
+     - /home/sanghoon/dataset:/workspace/dataset
+    ports:
+     - "8889:8889"
+    expose:
+     - "8889"
+    ipc: "host"
+    command: jupyter notebook --allow-root --ip="0.0.0.0" --port="8889" --no-browser --NotebookApp.base_url=/sh/ep --NotebookApp.password='sha1:92c6d0adcd9b:decad30a57b84281d3e95082bd9f08a443ab8017'
+
+  jupyter_wook:
+    image: sanghslee/pytorch:1.5.0
+    container_name: jupyter_wook
+    working_dir: /workspace/
+    volumes:
+     - /home/sanghoon/workspace/food:/workspace/work
+     - /home/sanghoon/dataset:/workspace/dataset
+    ports:
+     - "8890:8890"
+    expose:
+     - "8890"
+    ipc: "host"
+    command: jupyter notebook --allow-root --ip="0.0.0.0" --port="8890" --no-browser --NotebookApp.base_url=/sw/nb --NotebookApp.password='sha1:ca5c04b1c151:c4c0e29b93e74e2a2e768c2f9e970b505f5af398'
